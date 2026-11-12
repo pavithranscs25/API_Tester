@@ -36,6 +36,10 @@ public class ApiRequestService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "URL cannot be empty");
         }
 
+        if(request.getMethod() == null || request.getMethod().isBlank()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "HTTP Method is required");
+        }
+
         long startTime = System.nanoTime();
         String url=request.getUrl();
         String method=request.getMethod();
