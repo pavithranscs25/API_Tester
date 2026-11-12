@@ -3,7 +3,9 @@ package com.apitester.apitesterbackend.service;
 
 import com.apitester.apitesterbackend.dto.ApiRequest;
 import com.apitester.apitesterbackend.dto.ApiResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClient;
@@ -28,6 +30,11 @@ public class ApiRequestService {
                 .uri(url)
                 .headers(headers -> {
                     request.getHeaders().forEach(headers::add);
+                    if(request.getBody() != null &&
+                            !request.getBody().isBlank() &&
+                            !headers.containsHeader(HttpHeaders.CONTENT_TYPE)){
+                        headers.setContentType(MediaType.APPLICATION_JSON);
+                    }
                 })
                 .body(request.getBody())
                 .exchange((clientRequest, clientResponse) -> {
