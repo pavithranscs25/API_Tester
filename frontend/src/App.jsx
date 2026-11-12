@@ -115,6 +115,9 @@ function App() {
     } finally {
       setLoading(false)
     }
+    const result = await executeRequest(request)
+    console.log("Backend response:", result)
+    setResponse(result)
   }
 
   const loadHistory = (item) => {
