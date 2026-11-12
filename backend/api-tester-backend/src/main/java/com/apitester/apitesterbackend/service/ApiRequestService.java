@@ -5,10 +5,12 @@ import com.apitester.apitesterbackend.dto.ApiRequest;
 import com.apitester.apitesterbackend.dto.ApiResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 
@@ -22,6 +24,18 @@ public class ApiRequestService {
     }
 
     public ApiResponse executeRequest(ApiRequest request){
+        if(request == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body cannot be null");
+        }
+
+        if(request.getUrl() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "URL cannot be null");
+        }
+
+        if(request.getUrl().isBlank()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "URL cannot be empty");
+        }
+
         long startTime = System.nanoTime();
         String url=request.getUrl();
         String method=request.getMethod();
