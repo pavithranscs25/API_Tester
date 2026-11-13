@@ -53,6 +53,14 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [historySearch, setHistorySearch] = useState('')
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
+  const [toast, setToast] = useState(null)
+  const [feedbackForm, setFeedbackForm] = useState({
+    name: '',
+    email: '',
+    type: 'Bug report',
+    message: '',
+  })
   const bodySupported = ['POST', 'PUT', 'PATCH'].includes(method)
 
   useEffect(() => {
@@ -171,6 +179,20 @@ function App() {
     if (selectedHistory === id) setSelectedHistory(null)
   }
 
+  const handleFeedbackSubmit = (event) => {
+    event.preventDefault()
+    setFeedbackOpen(false)
+    setFeedbackForm({ name: '', email: '', type: 'Bug report', message: '' })
+    setToast({ type: 'success', message: 'Feedback submitted successfully. Thanks for helping improve API Tester.' })
+    window.setTimeout(() => setToast(null), 2800)
+  }
+
+  useEffect(() => {
+    if (!toast) return undefined
+    const timeout = window.setTimeout(() => setToast(null), 2800)
+    return () => window.clearTimeout(timeout)
+  }, [toast])
+
   const prettyResponse = response ? (typeof response.responseBody === 'string' ? response.responseBody : JSON.stringify(response.responseBody ?? '', null, 2)) : ''
   const responseSize = response ? formatSize(new Blob([prettyResponse]).size) : '—'
   const copyResponse = async () => {
@@ -219,11 +241,57 @@ function App() {
           </div>
           <div className="sidebar-bottom">
             <button className="sidebar-link"><Settings2 size={15} /> Settings <span>⌘ ,</span></button>
-            <button className="sidebar-link"><CircleHelp size={15} /> Help & feedback <ExternalLink size={13} /></button>
+            <button className="sidebar-link" onClick={() => setFeedbackOpen(true)}><CircleHelp size={15} /> Help & feedback <ExternalLink size={13} /></button>
             <div className="sidebar-footer"><div className="sync-dot" /> History is saved locally</div>
           </div>
         </aside>
         {sidebarOpen && <button className="sidebar-scrim" aria-label="Close sidebar" onClick={() => setSidebarOpen(false)} />}
+        {feedbackOpen && (
+          <div className="feedback-backdrop" onClick={() => setFeedbackOpen(false)}>
+            <div className="feedback-modal" onClick={(event) => event.stopPropagation()}>
+              <div className="feedback-header">
+                <div>
+                  <span className="eyebrow">FEEDBACK</span>
+                  <h3>Help & feedback</h3>
+                </div>
+                <button className="icon-button" aria-label="Close feedback modal" onClick={() => setFeedbackOpen(false)}><X size={16} /></button>
+              </div>
+              <form className="feedback-form" onSubmit={handleFeedbackSubmit}>
+                <label className="feedback-field">
+                  <span>Name</span>
+                  <input value={feedbackForm.name} onChange={(event) => setFeedbackForm((current) => ({ ...current, name: event.target.value }))} placeholder="Your name" />
+                </label>
+                <label className="feedback-field">
+                  <span>Email</span>
+                  <input type="email" value={feedbackForm.email} onChange={(event) => setFeedbackForm((current) => ({ ...current, email: event.target.value }))} placeholder="you@example.com" />
+                </label>
+                <label className="feedback-field">
+                  <span>Type</span>
+                  <select value={feedbackForm.type} onChange={(event) => setFeedbackForm((current) => ({ ...current, type: event.target.value }))}>
+                    <option>Bug report</option>
+                    <option>Feature request</option>
+                    <option>Question</option>
+                    <option>General feedback</option>
+                  </select>
+                </label>
+                <label className="feedback-field">
+                  <span>Message</span>
+                  <textarea rows="5" value={feedbackForm.message} onChange={(event) => setFeedbackForm((current) => ({ ...current, message: event.target.value }))} placeholder="Tell us what’s not working or what you’d like to improve..." required />
+                </label>
+                <div className="feedback-actions">
+                  <button type="button" className="cancel-button" onClick={() => setFeedbackOpen(false)}>Cancel</button>
+                  <button type="submit" className="submit-feedback">Send feedback</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+        {toast && (
+          <div className={`toast toast-${toast.type}`} role="status" aria-live="polite">
+            <div className="toast-icon">✓</div>
+            <div>{toast.message}</div>
+          </div>
+        )}
         <main className="main-panel">
           <div className="page-toolbar"><div className="breadcrumb"><span>My requests</span><span className="crumb-slash">/</span><strong>New request</strong><span className="unsaved-dot" /></div><div className="toolbar-right"><button className="subtle-button"><ShieldCheck size={14} /> Safe mode</button><button className="icon-button" title="More options"><Settings2 size={16} /></button></div></div>
           <section className="request-section">
@@ -281,7 +349,7 @@ function BodyEditor({ body, setBody, onPretty }) {
       onPretty()
     }
   }
-  return <div className="editor-content body-editor"><div className="editor-title"><div><h3>Request body</h3><p>Provide a JSON payload for this request.</p></div><button className="format-button" onClick={prettyClick}><Braces size={14} /> Pretty-print</button></div><div className="body-format-row"><span className="json-badge">JSON</span><span>application/json</span>{jsonError && <span className="inline-json-error">{jsonError}</span>}</div><textarea className="body-textarea" value={body} onChange={(event) => { setBody(event.target.value); setJsonError('') }} placeholder={'{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\"\n}'} spellCheck="false" aria-label="JSON request body" /></div>
+  return <div className="editor-content body-editor"><div className="editor-title"><div><h3>Request body</h3><p>Provide a JSON payload for this request.</p></div><button className="format-button" onClick={prettyClick}><Braces size={14} /> Pretty-print</button></div><div className="body-format-row"><span className="json-badge">JSON</span><span>application/json</span>{jsonError && <span className="inline-json-error">{jsonError}</span>}</div><textarea className="body-textarea" value={body} onChange={(event) => { setBody(event.target.value); setJsonError('') }}     placeholder={'{\n  "name": "Jane Doe",\n  "email": "jane@example.com"\n}'} spellCheck="false" aria-label="JSON request body" /></div>
 }
 
 function ResponseHeaders({ headers }) {
