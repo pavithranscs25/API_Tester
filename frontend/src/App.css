@@ -134,7 +134,7 @@ kbd { font: 10px 'DM Mono', monospace; color: var(--quiet); white-space: nowrap;
 .key-value-grid { max-width: 760px; }
 .grid-heading, .key-value-row { display: grid; grid-template-columns: 1fr 1.25fr 27px; align-items: center; gap: 10px; }
 .grid-heading { margin: 0 0 5px; color: var(--quiet); font: 700 8px 'DM Mono', monospace; letter-spacing: .8px; }
-.grid-heading:has(span:first-child:nth-last-child(4)), .key-value-row:has(.row-checkbox) { grid-template-columns: 18px 1fr 1.25fr 27px; }
+.grid-heading:has(span:first-child:nth-last-child(4)), .key-value-row:has(.row-checkbox) { grid-template-columns: 54px 1fr 1.25fr 27px; }
 .key-value-row { margin-bottom: 6px; }
 .key-value-row > input:not([type=checkbox]) { height: 32px; min-width: 0; border: 1px solid var(--line); border-radius: 5px; background: var(--panel); padding: 0 9px; color: var(--text); font: 10px 'DM Mono', monospace; }
 .key-value-row > input::placeholder, .auth-editor input::placeholder { color: var(--quiet); }

@@ -3,7 +3,7 @@ export function makeRequestUrl(baseUrl, params) {
   try {
     const url = new URL(baseUrl)
     params.forEach(({ key, value, enabled }) => {
-      if (enabled && key.trim()) url.searchParams.set(key.trim(), value)
+      if (enabled && key.trim()) url.searchParams.append(key.trim(), value)
     })
     return url.toString()
   } catch {
