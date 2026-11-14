@@ -12,6 +12,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
@@ -45,6 +46,33 @@ public class ApiRequestService {
             HttpMethod.valueOf(request.getMethod().toUpperCase());
         }catch (IllegalArgumentException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Method should be a vaild HTTP Method");
+        }
+
+        URI uri;
+
+        try {
+            uri = URI.create(request.getUrl());
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "URL must be HTTP or HTTPS");
+        }
+
+        try {
+            uri = URI.create(request.getUrl());
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal URL Argument");
+        }
+        if(!uri.isAbsolute()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"URL must be an absolute URL");
+        }
+
+        if(uri.getHost() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "URL must have a domain");
+        }
+
+        String scheme=uri.getScheme();
+
+        if(!scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https")){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only HTTP and HTTPS URLs are allowed");
         }
 
         long startTime = System.nanoTime();
