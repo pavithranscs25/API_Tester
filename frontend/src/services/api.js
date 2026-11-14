@@ -21,7 +21,9 @@ export async function executeRequest(request) {
   }
 
   if (!response.ok) {
-    const message = typeof data.message === 'string' ? data.message : typeof data.error === 'string' ? data.error : response.statusText
+    const message = [data.detail, data.message, data.title, data.error]
+      .find((value) => typeof value === 'string' && value.trim())
+      || response.statusText
     throw new Error(`Backend request failed (${response.status}): ${message || 'Unknown error'}`)
   }
 
