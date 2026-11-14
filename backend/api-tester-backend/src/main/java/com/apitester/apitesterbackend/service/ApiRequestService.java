@@ -13,6 +13,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 @Service
 public class ApiRequestService {
@@ -38,6 +39,12 @@ public class ApiRequestService {
 
         if(request.getMethod() == null || request.getMethod().isBlank()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "HTTP Method is required");
+        }
+
+        try {
+            HttpMethod.valueOf(request.getMethod().toUpperCase());
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Method should be a vaild HTTP Method");
         }
 
         long startTime = System.nanoTime();
