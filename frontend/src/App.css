@@ -217,7 +217,7 @@ kbd { font: 10px 'DM Mono', monospace; color: var(--quiet); white-space: nowrap;
 .response-error-state > span { max-width: 380px; line-height: 1.6; }
 .response-error-state code { color: var(--text); font: 10px 'DM Mono', monospace; }
 .retry-button { display: flex; align-items: center; gap: 7px; border: 0; border-radius: 5px; margin-top: 14px; padding: 7px 10px; color: #fff; background: var(--purple-strong); font-size: 10px; transition: transform .2s, filter .2s; }
-.error-banner { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin: 0 0 11px; border: 1px solid #ee858e44; border-radius: 7px; background: #ee858e0d; }
+.error-banner { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin: 10px 0 0; border: 1px solid #ee858e44; border-radius: 7px; background: #ee858e0d; }
 .error-icon { width: 19px; height: 19px; border-radius: 50%; display: grid; place-items: center; color: #ef858e; border: 1px solid #ef858e; font: 700 11px 'DM Mono', monospace; }
 .error-banner > div:nth-child(2) { flex: 1; display: flex; flex-direction: column; gap: 3px; }
 .error-banner strong { color: #ef858e; font-size: 10px; }
