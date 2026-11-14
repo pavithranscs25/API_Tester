@@ -45,7 +45,7 @@ public class ApiRequestService {
         try {
             HttpMethod.valueOf(request.getMethod().toUpperCase());
         }catch (IllegalArgumentException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Method should be a vaild HTTP Method");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Method should be a valid HTTP Method");
         }
 
         URI uri;
