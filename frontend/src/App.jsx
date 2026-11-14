@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Activity, ArrowDownToLine, Braces, ChevronDown, CircleHelp, Clock3, Code2, Command, Copy, ExternalLink, FileJson2, Globe2, History, Moon, Plus, Search, Send, Settings2, ShieldCheck, Sparkles, Sun, Trash2, X } from 'lucide-react'
+import { Activity, ArrowDownToLine, Braces, ChevronDown, CircleHelp, Clock3, Code2, Copy, ExternalLink, FileJson2, Globe2, History, Moon, PanelLeftClose, PanelLeftOpen, Plus, Search, Send, Settings2, ShieldCheck, Sparkles, Sun, Trash2, X } from 'lucide-react'
 import { executeRequest } from './services/api'
 import { formatSize, makeRequestUrl } from './utils/request'
 import './App.css'
@@ -50,7 +50,7 @@ function App() {
   const [history, setHistory] = useState(initialHistory)
   const [selectedHistory, setSelectedHistory] = useState(null)
   const [dark, setDark] = useState(true)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 700)
   const [copied, setCopied] = useState(false)
   const [historySearch, setHistorySearch] = useState('')
   const [feedbackOpen, setFeedbackOpen] = useState(false)
@@ -206,7 +206,6 @@ function App() {
     <div className={`app-shell ${dark ? 'theme-dark' : 'theme-light'}`}>
       <header className="topbar">
         <div className="brand-group">
-          <button className="mobile-menu icon-button" aria-label="Toggle sidebar" onClick={() => setSidebarOpen(!sidebarOpen)}><Command size={17} /></button>
           <div className="brand-mark"><Activity size={19} strokeWidth={2.5} /></div>
           <div className="brand-copy"><strong>api<span>tester</span></strong><small>WORKSPACE</small></div>
           <span className="workspace-divider" />
@@ -218,9 +217,15 @@ function App() {
           <button className="avatar" title="Profile">P</button>
         </div>
       </header>
-      <div className="app-content">
+      <div className={`app-content ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
         <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
-          <div className="sidebar-heading"><div><span className="eyebrow">WORKSPACE</span><h2>Collections</h2></div><button className="icon-button" onClick={clearRequest} title="New request"><Plus size={17} /></button></div>
+          <div className="sidebar-heading">
+            <div><span className="eyebrow">WORKSPACE</span><h2>Collections</h2></div>
+            <div className="sidebar-heading-actions">
+              <button className="icon-button" onClick={clearRequest} title="New request" aria-label="New request"><Plus size={17} /></button>
+              <button className="icon-button sidebar-hide-button" onClick={() => setSidebarOpen(false)} title="Hide sidebar" aria-label="Hide sidebar"><PanelLeftClose size={17} /></button>
+            </div>
+          </div>
           <button className="collection-card" onClick={clearRequest}>
             <div className="collection-icon"><Braces size={16} /></div>
             <div><strong>My requests</strong><small>{history.length} {history.length === 1 ? 'request' : 'requests'}</small></div>
@@ -245,6 +250,7 @@ function App() {
             <div className="sidebar-footer"><div className="sync-dot" /> History is saved locally</div>
           </div>
         </aside>
+        {!sidebarOpen && <button className="sidebar-reopen" onClick={() => setSidebarOpen(true)} title="Show sidebar" aria-label="Show sidebar"><PanelLeftOpen size={17} /><span>Show sidebar</span></button>}
         {sidebarOpen && <button className="sidebar-scrim" aria-label="Close sidebar" onClick={() => setSidebarOpen(false)} />}
         {feedbackOpen && (
           <div className="feedback-backdrop" onClick={() => setFeedbackOpen(false)}>
