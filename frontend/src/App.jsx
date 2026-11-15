@@ -13,7 +13,6 @@ import './App.css'
 const METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 const TABS = ['Params', 'Headers', 'Authorization', 'Body']
 const emptyRow = () => ({ key: '', value: '', enabled: true })
-const defaultUrl = 'https://jsonplaceholder.typicode.com/users'
 
 const initialHistory = () => {
   try {
@@ -60,7 +59,7 @@ function JsonViewer({ value }) {
 
 function App() {
   const [method, setMethod] = useState('GET')
-  const [url, setUrl] = useState(defaultUrl)
+  const [url, setUrl] = useState('')
   const [params, setParams] = useState([emptyRow()])
   const [headers, setHeaders] = useState([emptyRow()])
   const [authType, setAuthType] = useState('none')
