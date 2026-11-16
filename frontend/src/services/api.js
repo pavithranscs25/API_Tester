@@ -33,7 +33,7 @@ export async function executeRequest(request) {
 
   return {
     statusCode: data.statusCode,
-    statusText: data.statusText,
+    statusText: data.statusText.replace(new RegExp(`^\\s*${data.statusCode}\\s*`), '').trim(),
     responseTimeMs: Number(data.responseTimeMs) || 0,
     responseHeaders: data.responseHeaders && typeof data.responseHeaders === 'object' ? data.responseHeaders : {},
     responseBody: data.responseBody,
