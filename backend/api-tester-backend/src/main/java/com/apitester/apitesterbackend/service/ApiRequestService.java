@@ -14,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 
 @Service
 public class ApiRequestService {
